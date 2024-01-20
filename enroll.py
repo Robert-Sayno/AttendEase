@@ -1,48 +1,70 @@
-import face_recognition
-import mysql.connector
-from mysql.connector import Error
+import gradio as gr
+import mysql.connector  # Import MySQL connector
+import cv2  # Import OpenCV for camera access
+import os
+import tempfile
+import shutil
 
-# Connect to MySQL database
-try:
-    connection = mysql.connector.connect(host='localhost',
-                                         database='AttendEase',
-                                         user='root',
-                                         password='')
+# Connect to your database (replace placeholders with your credentials)
+mydb = mysql.connector.connect(
+    host="localhost",
+    user="root",
+    password="",
+    database="AttendEase"
+)
 
-    if connection.is_connected():
-        cursor = connection.cursor()
+def upload_images(student_name, student_email, reg_number, image1, image2, image3):
+    """Processes student information and images, saves them to the database,
+       and initiates face recognition and attendance recording."""
 
-        # Create a table to store face features
-        cursor.execute('''CREATE TABLE IF NOT EXISTS individuals
-                        (id INT AUTO_INCREMENT PRIMARY KEY,
-                         name VARCHAR(255) NOT NULL,
-                         face_features TEXT NOT NULL)''')
-        connection.commit()
+    mycursor = mydb.cursor()
 
-        def enroll_individual(name, image_path):
-            # Load the facial image for enrollment
-            image = face_recognition.load_image_file(image_path)
+    try:
+        # Create a temporary directory and save images
+        temp_dir = tempfile.mkdtemp()
+        image_paths = []
+        for i, img in enumerate([image1, image2, image3]):
+            image_path = os.path.join(temp_dir, f"image_{i+1}.jpg")
+            img.save(image_path)
+            image_paths.append(image_path)
 
-            # Find face locations and face encodings
-            face_locations = face_recognition.face_locations(image)
-            face_encodings = face_recognition.face_encodings(image, face_locations)
+        # Insert student data and image paths into the database
+        sql = "INSERT INTO students (name, email, reg_number, image_paths) VALUES (%s, %s, %s, %s)"
+        val = (student_name, student_email, reg_number, ",".join(image_paths))
+        mycursor.execute(sql, val)
+        mydb.commit()
 
-            if len(face_encodings) == 1:
-                # Convert the face features to a string for storage
-                face_features_str = ','.join(map(str, face_encodings[0]))
+        # Start face recognition and attendance recording
+        start_face_recognition(mycursor)
 
-                # Insert the data into the database
-                cursor.execute("INSERT INTO individuals (name, face_features) VALUES (%s, %s)", (name, face_features_str))
-                connection.commit()
-                print(f"Enrolled {name} successfully.")
-            else:
-                print(f"Error: Could not enroll {name}. More or less than one face found.")
+    except mysql.connector.Error as err:
+        print("Database error:", err)
+    except Exception as e:
+        print("Unexpected error:", e)
+    finally:
+        # Clean up temporary files
+        shutil.rmtree(temp_dir, ignore_errors=True)
 
-except Error as e:
-    print("Error:", e)
+def start_face_recognition(mycursor):
+    """Accesses webcam, performs face detection and recognition,
+       and records attendance if a match is found."""
 
-finally:
-    # Close the database connection
-    if connection.is_connected():
-        cursor.close()
-        connection.close()
+    # ... (Implement face recognition logic here)
+
+iface = gr.Interface(
+    fn=upload_images,
+    inputs=[
+        gr.Textbox(lines=1, placeholder="Enter student name"),
+        gr.Textbox(lines=1, placeholder="Enter student email"),
+        gr.Textbox(lines=1, placeholder="Enter registration number"),
+        gr.Image(type="numpy", label="Upload Image 1"),
+        gr.Image(type="numpy", label="Upload Image 2"),
+        gr.Image(type="numpy", label="Upload Image 3"),
+        gr.Button("Submit"),
+    ],
+    outputs=None,
+    title="Student Information and Image Upload",
+    live=True,
+)
+
+iface.launch(share=True)
