@@ -1,9 +1,11 @@
 import gradio as gr
-import mysql.connector
+import mysql.connector  # Import MySQL connector
+import cv2  # Import OpenCV for camera access
 import os
 import tempfile
 import shutil
 
+# Connect to your database (replace placeholders with your credentials)
 mydb = mysql.connector.connect(
     host="localhost",
     user="root",
@@ -46,6 +48,7 @@ def upload_images(student_name, student_email, reg_number, image1, image2, image
 def start_face_recognition(mycursor):
     """Accesses webcam, performs face detection and recognition,
        and records attendance if a match is found."""
+
     # ... (Implement face recognition logic here)
 
 # Create the Gradio interface
@@ -65,5 +68,5 @@ iface = gr.Interface(
     live=True,
 )
 
-# Launch the interface
-iface.launch()
+# Launch the interface (corrected call without extra arguments)
+iface.launch()  # Remove the `share=True` argument here

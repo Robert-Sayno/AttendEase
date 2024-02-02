@@ -1,0 +1,123 @@
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Admin - Students Details</title>
+        <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+        <style>
+            body {
+                font-family: Arial, sans-serif;
+                background-color: #f4f4f4;
+                margin: 0;
+                padding: 0;
+                box-sizing: border-box;
+            }
+    
+            .container {
+                max-width: 800px;
+                margin: 20px auto;
+                background-color: #fff;
+                padding: 20px;
+                border-radius: 8px;
+                box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            }
+    
+            h1 {
+                text-align: center;
+                color: #333;
+            }
+    
+            table {
+                width: 100%;
+                border-collapse: collapse;
+                margin-top: 20px;
+            }
+    
+            th, td {
+                padding: 12px;
+                text-align: left;
+                border-bottom: 1px solid #ddd;
+            }
+    
+            th {
+                background-color: #f2f2f2;
+            }
+    
+            .action-buttons {
+                display: flex;
+                justify-content: space-between;
+            }
+    
+            .delete-button, .edit-button {
+                padding: 8px;
+                margin: 5px;
+                border: none;
+                cursor: pointer;
+                border-radius: 4px;
+            }
+    
+            .delete-button {
+                background-color: #dc3545;
+                color: #fff;
+            }
+    
+            .edit-button {
+                background-color: #007bff;
+                color: #fff;
+            }
+        </style>
+    </head>
+    <!-- ... (your existing head content) ... -->
+</head>
+<body>
+    <div class="container">
+        <h1>Students Details</h1>
+        <table>
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Registration Number</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for student in students %}
+                    <tr>
+                        <td>{{ student.name }}</td>
+                        <td>{{ student.email }}</td>
+                        <td>{{ student.reg_number }}</td>
+                        <td class="action-buttons">
+                            <button class="delete-button" onclick="deleteStudent('{{ student.id }}')">Delete</button>
+                            <button class="edit-button" onclick="editStudent('{{ student.id }}')">Edit</button>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    
+<!-- Corrected link to use 'upload_images' as the endpoint -->
+<a href="{{ url_for('upload_images') }}">Go back to Upload</a>
+
+    </div>
+
+    <script>
+        function deleteStudent(studentId) {
+            // Implement deletion logic here
+            alert('Delete student with ID ' + studentId);
+        }
+
+        function editStudent(studentId) {
+            // Implement edit logic here
+            alert('Edit student with ID ' + studentId);
+        }
+    </script>
+</body>
+</html>
+

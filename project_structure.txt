@@ -1,0 +1,10 @@
+your_project_directory/
+│
+├── static/
+│   └── styles.css
+│
+├── templates/
+│   ├── upload.html
+│   └── students.html
+│
+└── app.py
