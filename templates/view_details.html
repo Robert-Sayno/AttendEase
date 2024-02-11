@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Details</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+
+        .student-details {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+        }
+
+        .student-photo {
+            width: 30%;
+            margin-bottom: 20px;
+        }
+
+        .student-details img {
+            width: 100%;
+            border-radius: 8px;
+        }
+
+        .back-button {
+            display: block;
+            text-align: center;
+            margin-top: 20px;
+            color: #007bff;
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Student Details</h1>
+        <table>
+            <tr>
+                <td>Name:</td>
+                <td>{{ student.name }}</td>
+            </tr>
+            <tr>
+                <td>Email:</td>
+                <td>{{ student.email }}</td>
+            </tr>
+            <tr>
+                <td>Registration Number:</td>
+                <td>{{ student.reg_number }}</td>
+            </tr>
+            <tr>
+                <td>Photos:</td>
+                <td>
+                    {% for image_path in student.image_paths %}
+                        <img src="{{ url_for('static', filename=image_path) }}" alt="Student Photo">
+                    {% endfor %}
+                </td>
+            </tr>
+        </table>
+        <a href="{{ url_for('students') }}">Back to Students</a>
+    </div>
+</body>
+</html>

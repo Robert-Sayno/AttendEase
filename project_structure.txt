@@ -8,3 +8,46 @@ your_project_directory/
 │   └── students.html
 │
 └── app.py
+your_project_directory:
+
+This is the root directory of your Flask project.
+static/:
+
+This directory is used to store static files such as CSS stylesheets, JavaScript files, images, etc.
+In this case, it contains styles.css for styling your HTML templates.
+templates/:
+
+This directory is used to store HTML templates.
+It contains two templates: upload.html and students.html.
+app.py:
+
+This is the main Flask application file.
+It contains the Flask application instance, routes, and other logic.
+Routes:
+/: Handles the upload of student information and images.
+/students: Displays a list of student details fetched from the database.
+Key Components and Operations:
+
+upload.html:
+
+Handles the form for uploading student information and images.
+Utilizes Flask's render_template function for rendering.
+students.html:
+
+Displays a table of student details.
+Provides buttons for potential actions like delete and edit.
+Utilizes Flask's render_template function for rendering.
+styles.css:
+
+Contains the CSS styles used to style the HTML templates.
+app.py:
+
+Contains the main Flask application logic.
+Connects to a MySQL database to perform operations like inserting and retrieving student information.
+Implements routes for handling different HTTP requests and rendering HTML templates.
+Overall Flow:
+
+Users can navigate to the / route to upload student information and images.
+Submitted data is processed, saved to the database, and a notification is displayed.
+Users can navigate to the /students route to view a list of student details fetched from the database.
+Styling is applied using the styles.css file.
