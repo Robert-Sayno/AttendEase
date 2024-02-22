@@ -12,32 +12,6 @@ db = mysql.connector.connect(
 )
 
 cursor = db.cursor()
-
-# Load known faces from the database
-cursor.execute("SELECT id, name, image_paths FROM students")
-students_data = cursor.fetchall()
-
-# Extract image paths and student IDs from the fetched data
-known_image_paths = [path.strip() for data in students_data for path in data[2].split(',')]
-
-# Load images
-known_images = []
-known_face_encodings = []
-
-for path in known_image_paths:
-    try:
-        image = face_recognition.load_image_file(path)
-        known_images.append(image)
-
-        # Extract face encodings
-        encoding = face_recognition.face_encodings(image)[0]
-        known_face_encodings.append(encoding)
-
-    except FileNotFoundError:
-        print(f"Warning: File not found at path {path}")
-    except Exception as e:
-        print(f"Error loading image from path {path}: {e}")
-
 # Open the webcam
 video_capture = cv2.VideoCapture(0)
 
