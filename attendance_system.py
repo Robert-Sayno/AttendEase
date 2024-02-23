@@ -2,6 +2,7 @@ import cv2
 import face_recognition
 from datetime import datetime
 import mysql.connector
+import os
 
 # Connect to the MySQL database
 db = mysql.connector.connect(
@@ -17,10 +18,13 @@ cursor = db.cursor()
 cursor.execute("SELECT id, name, image_paths FROM students")
 students_data = cursor.fetchall()
 
-# Extract image paths and student IDs from the fetched data
-known_image_paths = [path.strip() for data in students_data for path in data[2].split(',')]
+# Specify the location of the images directory
+image_directory = "/opt/lampp/htdocs/AttendEase/images"
 
-# Load images
+# Construct paths for known images
+known_image_paths = [os.path.join(image_directory, os.path.basename(path.strip())) for data in students_data for path in data[2].split(',')]
+
+# Load images and corresponding face encodings
 known_images = []
 known_face_encodings = []
 
@@ -38,7 +42,7 @@ for path in known_image_paths:
     except Exception as e:
         print(f"Error loading image from path {path}: {e}")
 
-# Open the webcam
+# Open the USB camera
 video_capture = cv2.VideoCapture(0)
 
 while True:

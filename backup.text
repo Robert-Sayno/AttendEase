@@ -2,6 +2,7 @@ import cv2
 import face_recognition
 from datetime import datetime
 import mysql.connector
+import os
 
 # Connect to the MySQL database
 db = mysql.connector.connect(
@@ -12,8 +13,51 @@ db = mysql.connector.connect(
 )
 
 cursor = db.cursor()
-# Open the webcam
-video_capture = cv2.VideoCapture(0)
+
+# Load known faces from the database
+cursor.execute("SELECT id, name, image_paths FROM students")
+students_data = cursor.fetchall()
+
+# Extract image paths and student IDs from the fetched data
+known_image_paths = [path.strip() for data in students_data for path in data[2].split(',')]
+
+# Load images and corresponding face encodings
+known_images = []
+known_face_encodings = []
+
+for path in known_image_paths:
+    try:
+        # Construct full path using the base directory
+        full_path = os.path.join('/tmp', path)
+
+        # Load the image using face_recognition
+        image = face_recognition.load_image_file(full_path)
+        known_images.append(image)
+
+        # Extract face encodings
+        encoding = face_recognition.face_encodings(image)[0]
+        known_face_encodings.append(encoding)
+
+    except FileNotFoundError:
+        print(f"Warning: File not found at path {full_path}")
+    except Exception as e:
+        print(f"Error loading image from path {full_path}: {e}")
+
+# Rest of your code remains unchanged
+# ...
+
+
+# Open the USB camera
+video_capture = None
+for index in usb_camera_indices:
+    cap = cv2.VideoCapture(index)
+    if cap.isOpened():
+        video_capture = cap
+        break
+
+if video_capture is None:
+    print("Error: Unable to open the USB camera. Check the indices.")
+    exit()
 
 while True:
     # Capture each frame from the webcam

@@ -1,10 +1,10 @@
 # Import necessary libraries
-from flask import Flask, render_template, request, flash
+from flask import Flask, render_template, request, flash, redirect, url_for
+from werkzeug.utils import secure_filename
 import mysql.connector
 import os
 import tempfile
 import shutil
-
 
 # Create a Flask app
 app = Flask(__name__)
@@ -24,13 +24,17 @@ def upload_images():
         mycursor = mydb.cursor()
 
         try:
-            # Create a temporary directory and save images
-            temp_dir = tempfile.mkdtemp()
+            # Construct paths for images in the "images" directory
+            images_directory = "/opt/lampp/htdocs/AttendEase/images"
             image_paths = []
+
             for i, img in enumerate([request.files['image1'], request.files['image2'], request.files['image3']]):
-                image_path = os.path.join(temp_dir, f"image_{i+1}.jpg")
+                # Use the original filename provided in the form
+                original_filename = secure_filename(img.filename)
+                image_path = os.path.join(images_directory, original_filename)
                 img.save(image_path)
                 image_paths.append(image_path)
+                print(f"Saved image: {image_path}")
 
             # Insert student data and image paths into the database
             sql = "INSERT INTO students (name, email, reg_number, image_paths) VALUES (%s, %s, %s, %s)"
@@ -47,9 +51,6 @@ def upload_images():
         except Exception as e:
             print("Unexpected error:", e)
             flash('Failed to upload student details!', 'error')  # Add this line for notification
-        finally:
-            # Clean up temporary files
-            shutil.rmtree(temp_dir, ignore_errors=True)
 
     return render_template('upload.html')
 
@@ -61,6 +62,12 @@ def students():
     students_data = mycursor.fetchall()
 
     return render_template('students.html', students=students_data)
+
+# Rest of your routes...
+
+if __name__ == '__main__':
+    app.run(debug=True, port=5009)
+
 
 @app.route('/view_details/<int:id>', methods=['GET'])
 def view_details(id):
