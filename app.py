@@ -71,8 +71,7 @@ if __name__ == '__main__':
 
 @app.route('/view_details/<int:id>', methods=['GET'])
 def view_details(id):
-    # Your logic to fetch student details from the database based on the id goes here
-
+    
     # For now, let's pass a dummy data to the template
     dummy_student_data = {
         'id': id,

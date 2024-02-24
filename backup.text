@@ -18,8 +18,11 @@ cursor = db.cursor()
 cursor.execute("SELECT id, name, image_paths FROM students")
 students_data = cursor.fetchall()
 
-# Extract image paths and student IDs from the fetched data
-known_image_paths = [path.strip() for data in students_data for path in data[2].split(',')]
+# Specify the location of the images directory
+image_directory = "/opt/lampp/htdocs/AttendEase/images"
+
+# Construct paths for known images
+known_image_paths = [os.path.join(image_directory, os.path.basename(path.strip())) for data in students_data for path in data[2].split(',')]
 
 # Load images and corresponding face encodings
 known_images = []
@@ -27,11 +30,7 @@ known_face_encodings = []
 
 for path in known_image_paths:
     try:
-        # Construct full path using the base directory
-        full_path = os.path.join('/tmp', path)
-
-        # Load the image using face_recognition
-        image = face_recognition.load_image_file(full_path)
+        image = face_recognition.load_image_file(path)
         known_images.append(image)
 
         # Extract face encodings
@@ -39,25 +38,12 @@ for path in known_image_paths:
         known_face_encodings.append(encoding)
 
     except FileNotFoundError:
-        print(f"Warning: File not found at path {full_path}")
+        print(f"Warning: File not found at path {path}")
     except Exception as e:
-        print(f"Error loading image from path {full_path}: {e}")
+        print(f"Error loading image from path {path}: {e}")
 
-# Rest of your code remains unchanged
-# ...
-
-
-# Open the USB camera
-video_capture = None
-for index in usb_camera_indices:
-    cap = cv2.VideoCapture(index)
-    if cap.isOpened():
-        video_capture = cap
-        break
-
-if video_capture is None:
-    print("Error: Unable to open the USB camera. Check the indices.")
-    exit()
+# Open the USB camera with index 2
+video_capture = cv2.VideoCapture(2)
 
 while True:
     # Capture each frame from the webcam

@@ -15,14 +15,14 @@ db = mysql.connector.connect(
 cursor = db.cursor()
 
 # Load known faces from the database
-cursor.execute("SELECT id, name, image_paths FROM students")
+cursor.execute("SELECT id, name, email, reg_number, image_paths FROM students")
 students_data = cursor.fetchall()
 
 # Specify the location of the images directory
 image_directory = "/opt/lampp/htdocs/AttendEase/images"
 
 # Construct paths for known images
-known_image_paths = [os.path.join(image_directory, os.path.basename(path.strip())) for data in students_data for path in data[2].split(',')]
+known_image_paths = [os.path.join(image_directory, os.path.basename(path.strip())) for data in students_data for path in data[4].split(',')]
 
 # Load images and corresponding face encodings
 known_images = []
@@ -64,12 +64,14 @@ while True:
             first_match_index = matches.index(True)
 
             # Extract student information from the matched data
-            student_id = students_data[first_match_index][0]
-            student_name = students_data[first_match_index][1]
+            student_data = students_data[first_match_index]
+            student_id, student_name, student_email, student_reg_number = student_data[0], student_data[1], student_data[2], student_data[3]
 
             # Record attendance in the database
-            current_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-            cursor.execute("INSERT INTO attendance (student_id, time) VALUES (%s, %s)", (student_id, current_time))
+            current_date = datetime.now().strftime("%Y-%m-%d")
+            current_time = datetime.now().strftime("%H:%M:%S")
+            cursor.execute("INSERT INTO attendance (student_id, student_name, student_email, student_reg_number, date, time) VALUES (%s, %s, %s, %s, %s, %s)",
+                           (student_id, student_name, student_email, student_reg_number, current_date, current_time))
             db.commit()
 
             print(f"Attendance recorded for {student_name}")
