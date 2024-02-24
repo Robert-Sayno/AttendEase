@@ -42,8 +42,8 @@ for path in known_image_paths:
     except Exception as e:
         print(f"Error loading image from path {path}: {e}")
 
-# Open the USB camera
-video_capture = cv2.VideoCapture(0)
+# Open the USB camera with index 2
+video_capture = cv2.VideoCapture(2)
 
 while True:
     # Capture each frame from the webcam
