@@ -58,8 +58,8 @@ while True:
         # Compare the current face encoding with the known face encodings
         matches = face_recognition.compare_faces(known_face_encodings, face_encoding)
 
-        # Check if there is a match
-        if True in matches:
+        # Check if there are any matches
+        if any(matches):
             # Get the index of the first match
             first_match_index = matches.index(True)
 
@@ -75,6 +75,8 @@ while True:
             db.commit()
 
             print(f"Attendance recorded for {student_name}")
+        else:
+            print("No matches found in the current frame")
 
     # Display the resulting frame
     cv2.imshow('Video', frame)
