@@ -85,9 +85,26 @@
             border-radius: 4px;
             box-sizing: border-box;
         }
+        header {
+            background-color: #007bff;
+            padding: 15px 0;
+            text-align: center;
+        }
+
+        header a {
+            color: #fff;
+            margin: 0 15px;
+            text-decoration: none;
+            font-weight: bold;
+        }
     </style>
 </head>
 <body>
+    <header>
+        <a href="{{ url_for('students') }}">Home</a>
+        <a href="{{ url_for('attendance') }}">Attendance</a>
+        <!-- Add more links as needed -->
+    </header>
     <div class="container">
         <h1>Students Details</h1>
         

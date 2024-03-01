@@ -15,6 +15,19 @@
             box-sizing: border-box;
         }
 
+        header {
+            background-color: #007bff;
+            color: #fff;
+            padding: 10px;
+            text-align: center;
+        }
+
+        header a {
+            color: #fff;
+            text-decoration: none;
+            margin: 0 15px;
+        }
+
         .container {
             max-width: 800px;
             margin: 20px auto;
@@ -55,6 +68,11 @@
     </style>
 </head>
 <body>
+    <header>
+        <a href="{{ url_for('students') }}">Students List</a>
+        <a href="{{ url_for('attendance') }}">Attendance</a>
+    </header>
+
     <div class="container">
         <h1>Student Details</h1>
         <table>

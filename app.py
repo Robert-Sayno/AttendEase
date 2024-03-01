@@ -49,6 +49,8 @@ def upload_images():
 
     return render_template('upload.html')
 
+
+
 @app.route('/students')
 def students():
     mycursor = mydb.cursor(dictionary=True)
@@ -105,6 +107,37 @@ def delete_student(id):
         return redirect(url_for('students'))
 
     return render_template('confirm_delete.html', student=student_data)
+
+
+def fetch_attendance_data(search_term):
+    mycursor = mydb.cursor(dictionary=True)
+
+    # Use prepared statements (parameterized queries) to prevent SQL injection
+    sql = """SELECT id, student_id, student_name, student_email, student_reg_number, date, time
+              FROM attendance
+              WHERE student_id LIKE %s OR student_name LIKE %s OR student_email LIKE %s OR student_reg_number LIKE %s"""
+    val = ("%" + search_term + "%", "%" + search_term + "%", "%" + search_term + "%", "%" + search_term + "%")
+
+    mycursor.execute(sql, val)
+    attendance_data = mycursor.fetchall()
+
+    return attendance_data
+
+
+@app.route('/attendance', methods=['GET', 'POST'])
+def attendance():
+    search_term = request.form.get('search_term', '')
+    attendance_data = fetch_attendance_data(search_term)
+
+    # Add this print statement for debugging
+    print("Attendance Data:", attendance_data)
+
+    # Check if attendance data is empty to handle no results gracefully
+    if not attendance_data:
+        return render_template('attendance.html', attendance=None, message="No attendance records found for the search term.")
+
+    return render_template('attendance.html', attendance=attendance_data)
+
 
 if __name__ == '__main__':
     app.run(debug=True, port=5009)

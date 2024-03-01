@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home</title>
+    <style>
+        body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    background-image: url('../AttendEase.jpeg'); /* Replace with the path to your background image */
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    color: #fff;
+    position: relative; /* Added position relative to make stacking work */
+}
+
+body::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5); /* Adjust the alpha value to control the transparency */
+}
+
+
+        header {
+            background-color: rgba(0, 0, 0, 0.7); /* Semi-transparent black background for the header */
+            padding: 20px;
+            text-align: center;
+        }
+
+        header h1 {
+            margin: 0;
+        }
+
+        nav {
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        nav a {
+            color: #fff;
+            margin: 0 15px;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            text-align: center;
+        }
+
+        .logo {
+            width: 100px; /* Adjust the size of your logo */
+            height: auto;
+            margin-bottom: 20px;
+        }
+
+        .background-overlay {
+            background: rgba(0, 0, 0, 0.5); /* Semi-transparent black overlay to improve readability */
+            padding: 20px;
+            border-radius: 8px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Your Logo or Brand Name</h1>
+        <nav>
+            <a href="{{ url_for('students') }}">Students</a>
+            <a href="{{ url_for('attendance') }}">Attendance</a>
+            <!-- Add more links as needed -->
+        </nav>
+    </header>
+
+    <div class="container">
+        <div class="background-overlay">
+           <!-- <img src="../AttendEase.jp" alt="Your Logo" class="logo">--> <!-- Replace with the path to your logo -->
+            <p>Welcome to Your Application</p>
+            <p>Explore the links above to manage students and attendance.</p>
+        </div>
+    </div>
+</body>
+</html>

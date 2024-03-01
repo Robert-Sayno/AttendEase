@@ -15,6 +15,19 @@
             box-sizing: border-box;
         }
 
+        header {
+            background-color: #007bff;
+            padding: 10px;
+            text-align: center;
+        }
+
+        header a {
+            color: #fff;
+            margin: 0 15px;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
         .container {
             max-width: 600px;
             margin: 20px auto;
@@ -74,6 +87,12 @@
     </style>
 </head>
 <body>
+    <header>
+       
+        <a href="{{ url_for('students') }}">Students</a>
+        <a href="{{ url_for('attendance') }}">Attendance</a>
+    </header>
+
     {% with messages = get_flashed_messages(with_categories=true) %}
         {% if messages %}
             <ul class="flash-messages">
@@ -108,10 +127,11 @@
             <button type="submit">Submit</button>
         </form>
         <!-- Add this link at the bottom of the upload.html page -->
-<div style="text-align: center; margin-top: 20px;">
-    <a href="{{ url_for('students') }}">View Students Details</a>
-</div>
-
+        <div style="text-align: center; margin-top: 20px;">
+            <a href="{{ url_for('students') }}">View Students Details</a>
+            <a href="{{ url_for('attendance') }}">View Attendance Details</a>
+        </div>
     </div>
+
 </body>
 </html>
