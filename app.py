@@ -1,4 +1,5 @@
 from flask import Flask, render_template, request, flash, redirect, url_for
+from werkzeug.security import check_password_hash
 from werkzeug.utils import secure_filename
 import mysql.connector
 import os
@@ -15,6 +16,25 @@ mydb = mysql.connector.connect(
 )
 
 @app.route('/', methods=['GET', 'POST'])
+def login():
+    if request.method == 'POST':
+        username = request.form.get('username')
+        password = request.form.get('password')
+
+        # Fetch user credentials from the database
+        mycursor = mydb.cursor(dictionary=True)
+        mycursor.execute("SELECT * FROM admins WHERE username = %s", (username,))
+        user_data = mycursor.fetchone()
+
+        if user_data and user_data['password'] == password:
+            flash('Login successful', 'success')
+            # Redirect to the home page after successful login
+            return redirect(url_for('home'))
+        else:
+            flash('Invalid username or password', 'error')
+    return render_template('admni_login.html')
+
+@app.route('/upload', methods=['GET', 'POST'])
 def upload_images():
     if request.method == 'POST':
         mycursor = mydb.cursor()
@@ -49,7 +69,9 @@ def upload_images():
 
     return render_template('upload.html')
 
-
+@app.route('/home')
+def home():
+    return render_template('home.html')
 
 @app.route('/students')
 def students():
@@ -137,6 +159,8 @@ def attendance():
         return render_template('attendance.html', attendance=None, message="No attendance records found for the search term.")
 
     return render_template('attendance.html', attendance=attendance_data)
+
+
 
 
 if __name__ == '__main__':

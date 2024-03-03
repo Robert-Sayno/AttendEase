@@ -4,45 +4,53 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Home</title>
+    <title>Attendance System</title>
     <style>
         body {
-    font-family: Arial, sans-serif;
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    background-image: url('../AttendEase.jpeg'); /* Replace with the path to your background image */
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-    color: #fff;
-    position: relative; /* Added position relative to make stacking work */
-}
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            background-image: url('../AttendEase.jpeg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            color: #fff;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+        }
 
-body::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.5); /* Adjust the alpha value to control the transparency */
-}
-
+        body::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.4);
+        }
 
         header {
-            background-color: rgba(0, 0, 0, 0.7); /* Semi-transparent black background for the header */
+            background-color: rgba(0, 0, 0, 0.7);
             padding: 20px;
             text-align: center;
+            border-radius: 8px;
         }
 
         header h1 {
             margin: 0;
+            font-size: 36px;
+            color: #ffd700;
         }
 
         nav {
             margin-top: 20px;
             text-align: center;
+            position: relative;
+            z-index: 1;
         }
 
         nav a {
@@ -50,41 +58,53 @@ body::before {
             margin: 0 15px;
             text-decoration: none;
             font-weight: bold;
+            font-size: 18px;
+            transition: color 0.3s ease;
+            display: inline-block;
+            padding: 10px;
+            border-radius: 5px;
+            border: 2px solid #ffd700;
+        }
+
+        nav a:hover {
+            background-color: #ffd700;
+            color: #000;
         }
 
         .container {
             max-width: 800px;
             margin: 20px auto;
             text-align: center;
-        }
-
-        .logo {
-            width: 100px; /* Adjust the size of your logo */
-            height: auto;
-            margin-bottom: 20px;
+            position: relative;
+            z-index: 1;
         }
 
         .background-overlay {
-            background: rgba(0, 0, 0, 0.5); /* Semi-transparent black overlay to improve readability */
-            padding: 20px;
+            background: rgba(0, 0, 0, 0.7);
+            padding: 40px;
             border-radius: 8px;
+            width: 100%;
+        }
+
+        .background-overlay p {
+            font-size: 20px;
+            margin-bottom: 15px;
+            color: #fff;
         }
     </style>
 </head>
 <body>
     <header>
-        <h1>Your Logo or Brand Name</h1>
-        <nav>
-            <a href="{{ url_for('students') }}">Students</a>
-            <a href="{{ url_for('attendance') }}">Attendance</a>
-            <!-- Add more links as needed -->
-        </nav>
+        <h1>Welcome to Attendance, your face recognition system</h1>
     </header>
 
     <div class="container">
         <div class="background-overlay">
-           <!-- <img src="../AttendEase.jp" alt="Your Logo" class="logo">--> <!-- Replace with the path to your logo -->
-            <p>Welcome to Your Application</p>
+            <nav>
+                <a href="{{ url_for('students') }}">View all Students</a>
+                <a href="{{ url_for('attendance') }}">View Attendance</a>
+                <a href="{{ url_for('upload_images') }}">Add more students data</a>
+            </nav>
             <p>Explore the links above to manage students and attendance.</p>
         </div>
     </div>
