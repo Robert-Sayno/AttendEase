@@ -160,6 +160,16 @@ def attendance():
 
     return render_template('attendance.html', attendance=attendance_data)
 
+@app.route('/view_attendance_details/<int:id>', methods=['GET'])
+def view_attendance_details(id):
+    # Fetch student details from the database based on the given id
+    # Replace the following lines with your actual database query logic
+    mycursor = mydb.cursor(dictionary=True)
+    mycursor.execute("SELECT * FROM attendance WHERE id = %s", (id,))
+    attendance_data = mycursor.fetchone()
+
+    return render_template('view_attendance_details.html', attendance=attendance_data)
+
 
 
 
